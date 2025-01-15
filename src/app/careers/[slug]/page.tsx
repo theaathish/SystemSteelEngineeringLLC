@@ -1,27 +1,32 @@
 import { client } from "@/lib/sanity";
 import { PortableText } from "@portabletext/react";
-import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-async function getJob(slug: string) {
-  const job = await client.fetch(`
-    *[_type == "job" && slug.current == $slug][0] {
-      title,
-      department,
-      location,
-      description,
-      requirements,
-      formEndpoint,
-      isAcceptingApplications,
-      requiredDocuments
-    }
-  `, { slug });
-  return job;
+interface PageProps {
+  params: {
+    slug: string;
+  };
 }
 
-export default async function JobPage({ params }: { params: { slug: string } }) {
-  const job = await getJob(params.slug);
+async function getJob(slug: string) {
+  const query = `*[_type == "job" && slug.current == $slug][0] {
+    title,
+    department,
+    location,
+    description,
+    requirements,
+    formEndpoint,
+    isAcceptingApplications,
+    requiredDocuments
+  }`;
+
+  return client.fetch(query, { slug });
+}
+
+export default async function SingleCareerPage({ params }: PageProps) {
+  const { slug } = params;
+  const job = await getJob(slug);
 
   if (!job) {
     return (
@@ -38,7 +43,7 @@ export default async function JobPage({ params }: { params: { slug: string } }) 
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
-      
+
       <main className="flex-1 py-20 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <section className="bg-white p-8 rounded-xl shadow-sm mb-8">
@@ -54,7 +59,7 @@ export default async function JobPage({ params }: { params: { slug: string } }) 
               <div className="text-gray-700">
                 <PortableText value={job.description} />
               </div>
-              
+
               <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">Requirements</h2>
               <ul className="text-gray-700 space-y-2">
                 {job.requirements.map((requirement: string, index: number) => (

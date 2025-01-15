@@ -1,9 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-      domains: ['cdn.sanity.io'], // Whitelist Sanity's CDN domain
-    },
-  };
-  
-  module.exports = nextConfig;
-  
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        pathname: '**',
+      }
+    ],
+  },
+};
+
+module.exports = nextConfig;

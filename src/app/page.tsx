@@ -293,7 +293,7 @@ export default function Home() {
                   className="flex-shrink-0 w-32 h-16 mx-4 flex items-center justify-center bg-white p-4 rounded-lg shadow-sm border border-gray-100"
                 >
                   <Image
-                    src={`/client${num}.png`}
+                    src={`/clients/client${num}.png`}
                     alt={`Client ${num} Logo`}
                     width={100}
                     height={50}
@@ -308,7 +308,7 @@ export default function Home() {
                   className="flex-shrink-0 w-32 h-16 mx-4 flex items-center justify-center bg-white p-4 rounded-lg shadow-sm border border-gray-100"
                 >
                   <Image
-                    src={`/client${num}.png`}
+                    src={`/clients/client${num}.png`}
                     alt={`Client Duplicate ${num} Logo`}
                     width={100}
                     height={50}
