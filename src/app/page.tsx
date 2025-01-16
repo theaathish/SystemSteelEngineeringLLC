@@ -14,7 +14,7 @@ export default function Home() {
     { src: "/Hero3.jpg", key: "slide3", alt: "Hero Image 3" },
     { src: "/Hero4.jpg", key: "slide4", alt: "Hero Image 4" },
     { src: "/Hero5.jpeg", key: "slide5", alt: "Hero Image 5" },
-    { src: "/Hero6.jpg", key: "slide6", alt: "Hero Image 6" }, // Corrected filename
+    { src: "/Hero6.jpg", key: "slide6", alt: "Hero Image 6" },
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -27,7 +27,7 @@ export default function Home() {
       setCurrentSlide((prevSlide) =>
         prevSlide === slides.length - 1 ? 0 : prevSlide + 1
       );
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
 
     return () => clearInterval(slideInterval);
   }, [slides.length]);
@@ -72,11 +72,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Carousel Section */}
-      <section
-        className="relative h-screen overflow-hidden"
-        aria-label="Hero Carousel"
-      >
-        {/* Slides */}
+      <section className="relative h-screen overflow-hidden" aria-label="Hero Carousel">
         {slides.map((slide, index) => (
           <div
             key={slide.key}
@@ -90,15 +86,14 @@ export default function Home() {
               layout="fill"
               objectFit="cover"
               className="brightness-50"
-              priority={index === 0} // Prioritize loading the first image
+              priority={index === 0}
             />
           </div>
         ))}
 
-        {/* Overlay Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4">
           <h1 className="text-3xl font-bold mb-4 text-center">
-            Welcome to System Steel Engineering LLC {""}
+            Welcome to System Steel Engineering LLC{" "}
             <FlipWords
               words={flipWords}
               duration={3000}
@@ -106,12 +101,10 @@ export default function Home() {
             />
           </h1>
           <p className="text-xl max-w-2xl text-center">
-            Delivering excellence in steel fabrication and structural engineering
-            across the UAE.
+            Delivering excellence in steel fabrication and structural engineering across the UAE.
           </p>
         </div>
 
-        {/* Navigation Controls */}
         <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-3">
           {slides.map((_, index) => (
             <button
@@ -129,45 +122,42 @@ export default function Home() {
       {/* Services Section */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">
-        Our Services
-          </h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Our Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
-        {[
-          {
-            title: "Structural Engineering",
-            description:
-          "Expert structural steel design and analysis for complex projects.",
-            icon: "🏗️",
-            link: "/services#structural-engineering",
-          },
-          {
-            title: "Steel Fabrication",
-            description:
-          "Precision fabrication with state-of-the-art equipment.",
-            icon: "⚙️",
-            link: "/services#steel-fabrication",
-          },
-          {
-            title: "Project Management",
-            description:
-          "Comprehensive project management from concept to completion.",
-            icon: "📋",
-            link: "/services#project-management",
-          },
-        ].map((service, index) => (
-          <Link
-            key={index}
-            href={service.link}
-            className="block bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow hover:bg-gray-50"
-          >
-            <div className="text-4xl mb-4">{service.icon}</div>
-            <h3 className="text-xl font-semibold mb-2 text-gray-900">
-          {service.title}
-            </h3>
-            <p className="text-gray-600">{service.description}</p>
-          </Link>
-        ))}
+            {[
+              {
+                title: "Structural Engineering",
+                description: "Expert structural steel design and analysis for complex projects.",
+                icon: "🏗️",
+                link: "/services#structural-engineering",
+              },
+              {
+                title: "Steel Fabrication",
+                description: "Precision fabrication with state-of-the-art equipment.",
+                icon: "⚙️",
+                link: "/services#steel-fabrication",
+              },
+              {
+                title: "Project Management",
+                description: "Comprehensive project management from concept to completion.",
+                icon: "📋",
+                link: "/services#project-management",
+              },
+            ].map((service, index) => (
+              <Link
+                key={index}
+                href={service.link}
+                className="block bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow hover:bg-gray-50"
+              >
+                <div className="text-4xl mb-4">
+                  {service.icon}
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-gray-900">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600">{service.description}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -180,9 +170,9 @@ export default function Home() {
               About System Steel
             </h2>
             <p className="text-gray-600 mb-6 text-sm md:text-base">
-              With decades of experience in steel engineering, we deliver innovative
-              solutions for complex structural challenges. Our commitment to quality
-              and precision sets us apart in the industry.
+              With decades of experience in steel engineering, we deliver innovative solutions for
+              complex structural challenges. Our commitment to quality and precision sets us apart
+              in the industry.
             </p>
             <Link
               href="/about"
@@ -203,16 +193,12 @@ export default function Home() {
         </div>
       </section>
 
-
-  {/* Client Logos Section */}}
+      {/* Client Logos Section */}
       <section className="mt-16 bg-gray-100 py-12 overflow-hidden">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-            Our Clients
-          </h2>
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Our Clients</h2>
           <div className="relative overflow-hidden">
             <div className="flex animate-scroll-right">
-              {/* First set of logos */}
               {[1, 2, 3, 4, 5].map((num) => (
                 <div
                   key={`logo-${num}`}
@@ -227,7 +213,6 @@ export default function Home() {
                   />
                 </div>
               ))}
-              {/* Duplicate set for seamless loop */}
               {[1, 2, 3, 4, 5, 6, 7].map((num) => (
                 <div
                   key={`logo-duplicate-${num}`}
