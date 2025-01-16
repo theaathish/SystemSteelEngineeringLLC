@@ -1,16 +1,15 @@
-//"use client";
+export const dynamic = "force-dynamic";
+
 import { client } from "@/lib/sanity";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Head from "next/head";
 import { Job } from "@/types/job";
-
 
 async function getJobs(): Promise<Job[]> {
   try {
-    const jobs = await client.fetch(`
+    return await client.fetch(`
       *[_type == "job" && isActive == true] | order(publishedAt desc) {
         _id,
         title,
@@ -22,7 +21,6 @@ async function getJobs(): Promise<Job[]> {
         publishedAt
       }
     `);
-    return jobs;
   } catch (error) {
     console.error("Error fetching jobs:", error);
     return [];
@@ -35,7 +33,6 @@ export default async function CareersPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
-      
       <main className="flex-1 py-20 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
@@ -43,10 +40,9 @@ export default async function CareersPage() {
             <Image
               src="/careers-banner.jpg"
               alt="Careers"
-              layout="fill"
-              objectFit="cover"
+              fill
+              className="brightness-50 rounded-xl object-cover"
               priority
-              className="brightness-50 rounded-xl"
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">Join Our Team</h1>
@@ -90,7 +86,6 @@ export default async function CareersPage() {
           </section>
         </div>
       </main>
-
       <Footer />
     </div>
   );
