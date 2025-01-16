@@ -193,7 +193,7 @@ export default function Home() {
           </div>
           <div className="w-full md:w-1/2 relative h-[300px] md:h-[400px] mt-6 md:mt-0">
             <Image
-              src="/hero.PNG"
+              src="/About_grp.png"
               alt="Steel Engineering Facility"
               fill
               className="object-cover rounded-xl"
@@ -203,82 +203,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Reviews Section */}
-      <section className="mt-16">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-            What Our Clients Say
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Review 1 */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <Image
-                  src="/clients/client1.jpg"
-                  alt="John Doe"
-                  width={50}
-                  height={50}
-                  className="rounded-full"
-                />
-                <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-800">John Doe</h3>
-                  <p className="text-sm text-gray-500">CEO, ABC Corp</p>
-                </div>
-              </div>
-              <p className="text-gray-600">
-                "System Steel Engineering provided outstanding service and delivered our
-                project ahead of schedule. Highly recommended!"
-              </p>
-            </div>
 
-            {/* Review 2 */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <Image
-                  src="/clients/client2.jpg"
-                  alt="Jane Smith"
-                  width={50}
-                  height={50}
-                  className="rounded-full"
-                />
-                <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-800">Jane Smith</h3>
-                  <p className="text-sm text-gray-500">Managing Director, XYZ Ltd</p>
-                </div>
-              </div>
-              <p className="text-gray-600">
-                "Their expertise in steel fabrication is unparalleled. Our facility looks
-                better than ever thanks to their team."
-              </p>
-            </div>
-
-            {/* Review 3 */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <div className="flex items-center mb-4">
-                <Image
-                  src="/clients/client3.jpg"
-                  alt="Michael Brown"
-                  width={50}
-                  height={50}
-                  className="rounded-full"
-                />
-                <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-800">Michael Brown</h3>
-                  <p className="text-sm text-gray-500">
-                    Project Manager, DEF Industries
-                  </p>
-                </div>
-              </div>
-              <p className="text-gray-600">
-                "Professional and reliable. They handled our complex structural engineering
-                needs with ease."
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Client Logos Section */}
+  {/* Client Logos Section */}}
       <section className="mt-16 bg-gray-100 py-12 overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
@@ -287,7 +213,7 @@ export default function Home() {
           <div className="relative overflow-hidden">
             <div className="flex animate-scroll-right">
               {/* First set of logos */}
-              {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+              {[1, 2, 3, 4, 5].map((num) => (
                 <div
                   key={`logo-${num}`}
                   className="flex-shrink-0 w-32 h-16 mx-4 flex items-center justify-center bg-white p-4 rounded-lg shadow-sm border border-gray-100"

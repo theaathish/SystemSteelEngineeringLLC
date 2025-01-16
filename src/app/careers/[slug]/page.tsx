@@ -7,7 +7,7 @@ import { PortableText } from "@portabletext/react";
 import { urlForImage } from "@/lib/image";
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 async function fetchContent(type: string, slug: string) {
@@ -19,14 +19,15 @@ async function fetchContent(type: string, slug: string) {
   }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const slug = params.slug;
   const project = await fetchContent('project', slug);
   const job = await fetchContent('job', slug);
 
   const content = project || job;
   const title = content?.title || "Not Found";
-  
+
   // Safely convert description to a string before substring
   const rawDescription = typeof content?.description === "string" ? content.description : "";
   const description = rawDescription.substring(0, 160) || "Content not available.";
@@ -41,7 +42,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function ContentPage({ params: { slug } }: Props) {
+export default async function ContentPage(props: Props) {
+  const params = await props.params;
+
+  const {
+    slug
+  } = params;
+
   const project = await fetchContent('project', slug);
   const job = await fetchContent('job', slug);
 

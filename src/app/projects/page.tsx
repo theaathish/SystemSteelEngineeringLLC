@@ -98,10 +98,7 @@ export default async function Projects() {
                           ))}
                         </div>
                       )}
-                      {/* Display Project Date */}
-                      <p className="mt-4 text-sm text-gray-500">
-                        Posted on: {new Date(project._createdAt).toLocaleDateString()}
-                      </p>
+
                     </div>
                   </article>
                 </Link>
