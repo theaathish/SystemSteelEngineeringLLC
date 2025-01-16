@@ -31,89 +31,90 @@ export default function Contact() {
             We'd love to hear from you. Please fill out this form or send us an email.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-8">
             {/* Contact Information */}
             <div className="md:col-span-1 space-y-8">
               <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h3 className="font-semibold text-gray-800 mb-4">Contact Information</h3>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-gray-600">Email</p>
-                    <p className="text-gray-800">info@systemsteelengg.com</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Phone</p>
-                    <p className="text-gray-800">+971 6 5362000</p>
-                    <p className="text-gray-800">+971 50 3948715</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Address</p>
-                    <p className="text-gray-800">P.o.Box:45514, Al Sajaah - Sharjah - United Arab Emirates</p>
-                  </div>
+              <h3 className="font-semibold text-black mb-4">Contact Information</h3>
+              <div className="space-y-4">
+                <div>
+                <p className="text-sm text-black">Email</p>
+                <p className="text-black">info@systemsteelengg.com</p>
                 </div>
+                <div>
+                <p className="text-sm text-black">Phone</p>
+                <p className="text-black">+971 6 5362000</p>
+                <p className="text-black">+971 50 3948715</p>
+                </div>
+                <div>
+                <p className="text-sm text-black">Address</p>
+                <p className="text-black">P.o.Box:45514, Al Sajaah - Sharjah - United Arab Emirates</p>
+                </div>
+              </div>
               </div>
             </div>
 
             {/* Contact Form */}
             <div className="md:col-span-2">
               <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                <form 
-                  action="https://getform.io/f/bmddlnpa" 
-                  method="POST" 
-                  className="mt-8 max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md"
-                >
-                  <div className="mb-4">
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
-                      placeholder="Your Name"
-                    />
-                  </div>
-                  
-                  <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                  
-                  <div className="mb-4">
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={5}
-                      required
-                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
-                      placeholder="Your message..."
-                    ></textarea>
-                  </div>
-                  
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                  >
-                    Send Message
-                  </button>
-                </form>
+              <form 
+              action="https://getform.io/f/bmddlnpa" 
+              method="POST" 
+              className="mt-8 max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md"
+              >
+              <div className="mb-4">
+              <label htmlFor="name" className="block text-sm font-medium text-black">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200 text-black opacity-100"
+                placeholder="Your Name"
+              />
+              </div>
+              
+              <div className="mb-4">
+              <label htmlFor="email" className="block text-sm font-medium text-black">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200 text-black opacity-100"
+                placeholder="you@example.com"
+              />
+              </div>
+              
+              <div className="mb-4">
+              <label htmlFor="message" className="block text-sm font-medium text-black">
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={5}
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200 text-black opacity-100"
+                placeholder="Your message..."
+              ></textarea>
+              </div>
+              
+              <button
+              type="submit"
+              className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              >
+              Send Message
+              </button>
+              </form>
               </div>
             </div>
-          </div>
+            </div>
+
 
           {/* Map Section */}
           <div className="mt-16">

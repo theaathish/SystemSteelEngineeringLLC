@@ -3,9 +3,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return pathname === path;
+    }
+    return pathname.startsWith(path);
+  };
+
+  const linkClass = (path: string) => `
+    text-sm font-medium transition-colors
+    ${isActive(path) 
+      ? 'text-[rgb(24,73,152)] font-semibold' 
+      : 'text-gray-600 hover:text-gray-900'}
+  `;
 
   return (
     <header className="fixed w-full bg-white border-b border-gray-100 z-50">
@@ -19,28 +35,52 @@ export default function Navbar() {
             className="h-10 w-auto"
           />
           <span className="font-bold text-xl text-gray-900">
-
+            System Steel
           </span>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="/" className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors">
+          <Link 
+            href="/" 
+            className={linkClass('/')}
+            aria-current={isActive('/') ? 'page' : undefined}
+          >
             Home
           </Link>
-          <Link href="/services" className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors">
+          <Link 
+            href="/services" 
+            className={linkClass('/services')}
+            aria-current={isActive('/services') ? 'page' : undefined}
+          >
             Services
           </Link>
-          <Link href="/projects" className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors">
+          <Link 
+            href="/projects" 
+            className={linkClass('/projects')}
+            aria-current={isActive('/projects') ? 'page' : undefined}
+          >
             Projects
           </Link>
-          <Link href="/careers" className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors">
+          <Link 
+            href="/careers" 
+            className={linkClass('/careers')}
+            aria-current={isActive('/careers') ? 'page' : undefined}
+          >
             Careers
           </Link>
-          <Link href="/about" className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors">
+          <Link 
+            href="/about" 
+            className={linkClass('/about')}
+            aria-current={isActive('/about') ? 'page' : undefined}
+          >
             About
           </Link>
-          <Link href="/contact" className="text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors">
+          <Link 
+            href="/contact" 
+            className={linkClass('/contact')}
+            aria-current={isActive('/contact') ? 'page' : undefined}
+          >
             Contact
           </Link>
         </nav>

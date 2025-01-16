@@ -127,7 +127,7 @@ export default async function ContentPage(props: Props) {
                         type="text"
                         name="name"
                         required
-                        className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-3 text-gray-900"
+                        className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-3 text-black opacity-100"
                       />
                     </div>
                     <div>
@@ -136,7 +136,7 @@ export default async function ContentPage(props: Props) {
                         type="email"
                         name="email"
                         required
-                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-black opacity-100"
                       />
                     </div>
                     <div>
@@ -144,7 +144,7 @@ export default async function ContentPage(props: Props) {
                       <input
                         type="tel"
                         name="phone"
-                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-black opacity-100"
                       />
                     </div>
                     {content.requiredDocuments?.includes('resume') && (
@@ -155,7 +155,7 @@ export default async function ContentPage(props: Props) {
                           name="resume"
                           accept=".pdf,.doc,.docx"
                           required
-                          className="mt-1 block w-full"
+                          className="mt-1 block w-full text-black opacity-100"
                         />
                       </div>
                     )}
