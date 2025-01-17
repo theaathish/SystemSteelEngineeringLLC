@@ -35,7 +35,6 @@ export default function Navbar() {
             className="h-10 w-auto"
           />
           <span className="font-bold text-xl text-gray-900">
-            System Steel
           </span>
         </Link>
 
