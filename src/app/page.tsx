@@ -213,7 +213,7 @@ export default function Home() {
                   />
                 </div>
               ))}
-              {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+              {[1, 2, 3, 4, 5].map((num) => (
                 <div
                   key={`logo-duplicate-${num}`}
                   className="flex-shrink-0 w-32 h-16 mx-4 flex items-center justify-center bg-white p-4 rounded-lg shadow-sm border border-gray-100"
