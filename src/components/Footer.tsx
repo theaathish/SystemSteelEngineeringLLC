@@ -47,8 +47,9 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-gray-800 mb-4">Location</h3>
             <p className="text-gray-600 text-sm">
+              System Steel Engineering LLC<br />
               P.o.Box:45514,<br />
-              Al Sajaah - Sharjah<br />
+              Al Sajaah - Sharjah & Dubai<br />
               United Arab Emirates
             </p>
           </div>

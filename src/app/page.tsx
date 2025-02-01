@@ -10,7 +10,7 @@ import FlipWords from "@/components/ui/flip-words";
 export default function Home() {
   const slides = [
     { src: "/Hero1.jpg", key: "slide1", alt: "Hero Image 1" },
-    { src: "/Hero2.jpg", key: "slide2", alt: "Hero Image 2" },
+    { src: "/hero2.jpg", key: "slide2", alt: "Hero Image 2" },
     { src: "/Hero3.jpg", key: "slide3", alt: "Hero Image 3" },
     { src: "/Hero4.jpg", key: "slide4", alt: "Hero Image 4" },
     { src: "/Hero5.jpeg", key: "slide5", alt: "Hero Image 5" },
@@ -183,7 +183,7 @@ export default function Home() {
           </div>
           <div className="w-full md:w-1/2 relative h-[300px] md:h-[400px] mt-6 md:mt-0">
             <Image
-              src="/About_grp.png"
+              src="/About_frame.png"
               alt="Steel Engineering Facility"
               fill
               className="object-cover rounded-xl"
