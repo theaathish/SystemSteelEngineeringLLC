@@ -5,42 +5,30 @@ import Footer from "@/components/Footer";
 import { useState } from "react";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('https://formspree.io/f/mrbgdpzq', {
         method: 'POST',
+        body: formData,
         headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+          'Accept': 'application/json'
+        }
       });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
+      if (response.ok) {
         setSubmitStatus('success');
-        setFormData({ name: '', email: '', message: '' });
+        form.reset();
       } else {
-        console.error('Form submission error:', data.error);
         setSubmitStatus('error');
       }
     } catch (error) {
@@ -105,6 +93,9 @@ export default function Contact() {
             <div className="md:col-span-2">
               <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  <input type="hidden" name="_next" value="https://systemsteelengg.com/contact?success=true" />
+                  <input type="hidden" name="_subject" value="New Contact Form Submission" />
+                  
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-black mb-2">
                       Name
@@ -113,8 +104,6 @@ export default function Contact() {
                       type="text"
                       id="name"
                       name="name"
-                      value={formData.name}
-                      onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                       placeholder="Your Name"
@@ -129,8 +118,6 @@ export default function Contact() {
                       type="email"
                       id="email"
                       name="email"
-                      value={formData.email}
-                      onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                       placeholder="you@example.com"
@@ -145,8 +132,6 @@ export default function Contact() {
                       id="message"
                       name="message"
                       rows={5}
-                      value={formData.message}
-                      onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                       placeholder="Your message..."

@@ -196,14 +196,46 @@ This is a job application submitted through the careers page.`
                   <div className="border-t pt-8 mt-8">
                     <h3 className="text-xl font-semibold text-gray-900 mb-6">Apply for this position</h3>
                     
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={async (e) => {
+                      e.preventDefault();
+                      setIsSubmitting(true);
+                      setSubmitStatus('idle');
+
+                      const form = e.currentTarget;
+                      const formData = new FormData(form);
+                      
+                      // Add job title to form data
+                      formData.append('jobTitle', content?.title || '');
+                      formData.append('_subject', `Job Application for: ${content?.title}`);
+
+                      try {
+                        const response = await fetch('https://formspree.io/f/mrbgdpzq', {
+                          method: 'POST',
+                          body: formData,
+                          headers: {
+                            'Accept': 'application/json'
+                          }
+                        });
+
+                        if (response.ok) {
+                          setSubmitStatus('success');
+                          form.reset();
+                        } else {
+                          setSubmitStatus('error');
+                        }
+                      } catch (error) {
+                        console.error('Network error:', error);
+                        setSubmitStatus('error');
+                      } finally {
+                        setIsSubmitting(false);
+                      }
+                    }} className="space-y-6">
+                      
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                         <input
                           type="text"
                           name="name"
-                          value={formData.name}
-                          onChange={handleChange}
                           required
                           className="w-full rounded-md border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="Your full name"
@@ -215,8 +247,6 @@ This is a job application submitted through the careers page.`
                         <input
                           type="email"
                           name="email"
-                          value={formData.email}
-                          onChange={handleChange}
                           required
                           className="w-full rounded-md border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="your.email@example.com"
@@ -228,8 +258,6 @@ This is a job application submitted through the careers page.`
                         <input
                           type="tel"
                           name="phone"
-                          value={formData.phone}
-                          onChange={handleChange}
                           className="w-full rounded-md border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="+971 XX XXX XXXX"
                         />
@@ -238,9 +266,7 @@ This is a job application submitted through the careers page.`
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Cover Letter *</label>
                         <textarea
-                          name="coverLetter"
-                          value={formData.coverLetter}
-                          onChange={handleChange}
+                          name="message"
                           required
                           rows={6}
                           className="w-full rounded-md border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
