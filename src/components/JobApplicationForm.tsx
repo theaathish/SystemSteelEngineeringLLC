@@ -1,1 +1,3 @@
-// This component has been removed - using Google Forms redirect instead
+export default function JobApplicationForm() {
+  return null;
+}

@@ -1,1 +1,3 @@
-// This page has been removed - using Google Forms for job applications
+export default function AdminSubmissions() {
+  return null;
+}

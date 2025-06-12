@@ -1,1 +1,3 @@
-// This file has been removed - using Formspree instead
+export default function ContactResend() {
+  return null;
+}
