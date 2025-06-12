@@ -102,10 +102,10 @@ export const schema = {
           initialValue: (new Date()).toISOString()
         },
         {
-          name: 'formEndpoint',
-          title: 'Application Form Endpoint',
+          name: 'googleFormUrl',
+          title: 'Google Form URL',
           type: 'url',
-          description: 'Getform.io endpoint URL for this job posting',
+          description: 'Google Form link for job applications (e.g., https://forms.gle/abc123)',
           validation: Rule => Rule.required().uri({
             scheme: ['https']
           }),

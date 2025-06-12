@@ -5,30 +5,42 @@ import Footer from "@/components/Footer";
 import { useState } from "react";
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
     try {
-      const response = await fetch('https://formspree.io/f/mrbgdpzq', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
-        body: formData,
         headers: {
-          'Accept': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
+      const data = await response.json();
+
+      if (response.ok && data.success) {
         setSubmitStatus('success');
-        form.reset();
+        setFormData({ name: '', email: '', message: '' });
       } else {
+        console.error('Form submission error:', data.error);
         setSubmitStatus('error');
       }
     } catch (error) {
@@ -93,70 +105,98 @@ export default function Contact() {
             <div className="md:col-span-2">
               <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <input type="hidden" name="_next" value="https://systemsteelengg.com/contact?success=true" />
-                  <input type="hidden" name="_subject" value="New Contact Form Submission" />
-                  
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-black mb-2">
-                      Name
+                      Name *
                     </label>
                     <input
                       type="text"
                       id="name"
                       name="name"
+                      value={formData.name}
+                      onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                      placeholder="Your Name"
+                      placeholder="Your Full Name"
                     />
                   </div>
                   
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-black mb-2">
-                      Email
+                      Email *
                     </label>
                     <input
                       type="email"
                       id="email"
                       name="email"
+                      value={formData.email}
+                      onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                      placeholder="you@example.com"
+                      placeholder="your.email@example.com"
                     />
                   </div>
                   
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-black mb-2">
-                      Message
+                      Message *
                     </label>
                     <textarea
                       id="message"
                       name="message"
-                      rows={5}
+                      rows={6}
+                      value={formData.message}
+                      onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                      placeholder="Your message..."
+                      placeholder="Please describe your project requirements, questions, or how we can help you..."
                     />
                   </div>
                   
                   {submitStatus === 'success' && (
-                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                      Thank you! Your message has been sent successfully. We will get back to you soon.
+                    <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
+                      <div className="flex items-center">
+                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        Thank you! Your message has been sent successfully. We will get back to you within 24 hours.
+                      </div>
                     </div>
                   )}
                   
                   {submitStatus === 'error' && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                      Sorry, there was an error sending your message. Please try again or contact us directly.
+                    <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+                      <div className="flex items-center">
+                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                        Sorry, there was an error sending your message. Please email us directly at{' '}
+                        <a href="mailto:info@systemsteelengg.com" className="underline font-medium">
+                          info@systemsteelengg.com
+                        </a>
+                      </div>
                     </div>
                   )}
                   
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-blue-600 text-white px-4 py-3 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex items-center justify-center"
                   >
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                    {isSubmitting ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Sending Message...
+                      </>
+                    ) : 'Send Message'}
                   </button>
+                  
+                  <p className="text-sm text-gray-600 text-center">
+                    * Required fields. We typically respond within 24 hours during business days.
+                  </p>
                 </form>
               </div>
             </div>
