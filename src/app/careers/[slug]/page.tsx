@@ -1,5 +1,4 @@
 "use client";
-import { Metadata } from 'next';
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -34,7 +33,7 @@ async function fetchContent(type: string, slug: string) {
   }
 }
 
-export default function ContentPage({ params }: { params: { slug: string } }) {
+export default function ContentPage({ params }: Props) {
   const [content, setContent] = useState<Content | null>(null);
   const [isProject, setIsProject] = useState(false);
   const [loading, setLoading] = useState(true);
