@@ -1,8 +1,56 @@
+"use client";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useState } from "react";
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        console.error('Form submission error:', data.error);
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
@@ -14,9 +62,8 @@ export default function Contact() {
             <Image
               src="/contact-banner.jpg"
               alt="Contact Us"
-              layout="fill"
-              objectFit="cover"
-              className="brightness-50 rounded-xl"
+              fill
+              className="brightness-50 rounded-xl object-cover"
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
               <h1 className="text-4xl font-bold mb-4 sm:text-2xl">Contact Us</h1>
@@ -31,90 +78,104 @@ export default function Contact() {
             We'd love to hear from you. Please fill out this form or send us an email.
           </p>
 
-            <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {/* Contact Information */}
             <div className="md:col-span-1 space-y-8">
               <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h3 className="font-semibold text-black mb-4">Contact Information</h3>
-              <div className="space-y-4">
-                <div>
-                <p className="text-sm text-black">Email</p>
-                <p className="text-black">info@systemsteelengg.com</p>
+                <h3 className="font-semibold text-black mb-4">Contact Information</h3>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm text-black">Email</p>
+                    <p className="text-black">info@systemsteelengg.com</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-black">Phone</p>
+                    <p className="text-black">+971 6 5362000</p>
+                    <p className="text-black">+971 50 3948715</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-black">Address</p>
+                    <p className="text-black">P.o.Box:45514, Al Sajaah - Sharjah - United Arab Emirates</p>
+                  </div>
                 </div>
-                <div>
-                <p className="text-sm text-black">Phone</p>
-                <p className="text-black">+971 6 5362000</p>
-                <p className="text-black">+971 50 3948715</p>
-                </div>
-                <div>
-                <p className="text-sm text-black">Address</p>
-                <p className="text-black">P.o.Box:45514, Al Sajaah - Sharjah - United Arab Emirates</p>
-                </div>
-              </div>
               </div>
             </div>
 
             {/* Contact Form */}
             <div className="md:col-span-2">
               <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-              <form 
-              action="https://getform.io/f/bmddlnpa" 
-              method="POST" 
-              className="mt-8 max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md"
-              >
-              <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-black">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200 text-black opacity-100"
-                placeholder="Your Name"
-              />
-              </div>
-              
-              <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-black">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200 text-black opacity-100"
-                placeholder="you@example.com"
-              />
-              </div>
-              
-              <div className="mb-4">
-              <label htmlFor="message" className="block text-sm font-medium text-black">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                required
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200 text-black opacity-100"
-                placeholder="Your message..."
-              ></textarea>
-              </div>
-              
-              <button
-              type="submit"
-              className="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-              >
-              Send Message
-              </button>
-              </form>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-black mb-2">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                      placeholder="Your Name"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-black mb-2">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                      placeholder="you@example.com"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-black mb-2">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows={5}
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                      placeholder="Your message..."
+                    />
+                  </div>
+                  
+                  {submitStatus === 'success' && (
+                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                      Thank you! Your message has been sent successfully. We will get back to you soon.
+                    </div>
+                  )}
+                  
+                  {submitStatus === 'error' && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                      Sorry, there was an error sending your message. Please try again or contact us directly.
+                    </div>
+                  )}
+                  
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-blue-600 text-white px-4 py-3 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                  </button>
+                </form>
               </div>
             </div>
-            </div>
-
+          </div>
 
           {/* Map Section */}
           <div className="mt-16">
@@ -127,7 +188,7 @@ export default function Contact() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
+              />
             </div>
           </div>
         </div>

@@ -1,3 +1,4 @@
+"use client";
 import { Metadata } from 'next';
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
@@ -5,10 +6,24 @@ import Footer from "@/components/Footer";
 import { client } from "@/lib/sanity";
 import { PortableText } from "@portabletext/react";
 import { urlForImage } from "@/lib/image";
+import { useState, useEffect } from "react";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+interface Content {
+  _id: string;
+  title: string;
+  description: any;
+  mainImage?: any;
+  tags?: string[];
+  videoFile?: { url: string };
+  department?: string;
+  location?: string;
+  isAcceptingApplications?: boolean;
+  requiredDocuments?: string[];
+}
 
 async function fetchContent(type: string, slug: string) {
   try {
@@ -19,40 +34,108 @@ async function fetchContent(type: string, slug: string) {
   }
 }
 
-export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
-  const slug = params.slug;
-  const project = await fetchContent('project', slug);
-  const job = await fetchContent('job', slug);
+export default function ContentPage({ params }: { params: { slug: string } }) {
+  const [content, setContent] = useState<Content | null>(null);
+  const [isProject, setIsProject] = useState(false);
+  const [loading, setLoading] = useState(true);
+  
+  // Form state for job applications
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    coverLetter: '',
+    jobTitle: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  const content = project || job;
-  const title = content?.title || "Not Found";
+  useEffect(() => {
+    async function loadContent() {
+      const resolvedParams = await params;
+      const slug = resolvedParams.slug;
+      
+      const project = await fetchContent('project', slug);
+      const job = await fetchContent('job', slug);
+      
+      const foundContent = project || job;
+      setContent(foundContent);
+      setIsProject(Boolean(project));
+      
+      if (job) {
+        setFormData(prev => ({ ...prev, jobTitle: job.title }));
+      }
+      
+      setLoading(false);
+    }
+    
+    loadContent();
+  }, [params]);
 
-  // Safely convert description to a string before substring
-  const rawDescription = typeof content?.description === "string" ? content.description : "";
-  const description = rawDescription.substring(0, 160) || "Content not available.";
-
-  return {
-    title: `${title} | System Steel Engineering`,
-    description,
-    openGraph: {
-      title,
-      description,
-    },
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
-}
 
-export default async function ContentPage(props: Props) {
-  const params = await props.params;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
 
-  const {
-    slug
-  } = params;
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: `Job Application for: ${formData.jobTitle}
 
-  const project = await fetchContent('project', slug);
-  const job = await fetchContent('job', slug);
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
 
-  if (!project && !job) {
+Cover Letter:
+${formData.coverLetter}
+
+This is a job application submitted through the careers page.`
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', phone: '', coverLetter: '', jobTitle: content?.title || '' });
+      } else {
+        console.error('Form submission error:', data.error);
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-white">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center">
+          <div>Loading...</div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!content) {
     return (
       <div className="min-h-screen flex flex-col bg-white">
         <Navbar />
@@ -63,9 +146,6 @@ export default async function ContentPage(props: Props) {
       </div>
     );
   }
-
-  const content = project || job;
-  const isProject = Boolean(project);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -79,7 +159,7 @@ export default async function ContentPage(props: Props) {
                   <Image
                     src={urlForImage(content.mainImage).url()}
                     alt={content.title}
-                    layout="fill"
+                    fill
                     className="object-cover rounded-lg"
                     priority
                   />
@@ -114,58 +194,87 @@ export default async function ContentPage(props: Props) {
                   <PortableText value={content.description} />
                 </div>
                 {content.isAcceptingApplications && (
-                  <form
-                    action={content.formEndpoint}
-                    method="POST"
-                    encType="multipart/form-data"
-                    className="space-y-6 border-t pt-8 mt-8"
-                  >
+                  <div className="border-t pt-8 mt-8">
                     <h3 className="text-xl font-semibold text-gray-900 mb-6">Apply for this position</h3>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
-                      <input
-                        type="text"
-                        name="name"
-                        required
-                        className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-3 text-black opacity-100"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Email *</label>
-                      <input
-                        type="email"
-                        name="email"
-                        required
-                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-black opacity-100"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Phone</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-black opacity-100"
-                      />
-                    </div>
-                    {content.requiredDocuments?.includes('resume') && (
+                    
+                    <form onSubmit={handleSubmit} className="space-y-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Resume/CV *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                         <input
-                          type="file"
-                          name="resume"
-                          accept=".pdf,.doc,.docx"
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
                           required
-                          className="mt-1 block w-full text-black opacity-100"
+                          className="w-full rounded-md border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Your full name"
                         />
                       </div>
-                    )}
-                    <button
-                      type="submit"
-                      className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
-                    >
-                      Submit Application
-                    </button>
-                  </form>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          className="w-full rounded-md border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="your.email@example.com"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className="w-full rounded-md border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="+971 XX XXX XXXX"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Cover Letter *</label>
+                        <textarea
+                          name="coverLetter"
+                          value={formData.coverLetter}
+                          onChange={handleChange}
+                          required
+                          rows={6}
+                          className="w-full rounded-md border border-gray-300 px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Tell us why you're interested in this position and what makes you a great fit..."
+                        />
+                      </div>
+                      
+                      {submitStatus === 'success' && (
+                        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                          Thank you! Your application has been submitted successfully. We will review it and get back to you soon.
+                        </div>
+                      )}
+                      
+                      {submitStatus === 'error' && (
+                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                          Sorry, there was an error submitting your application. Please try again or contact us directly.
+                        </div>
+                      )}
+                      
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isSubmitting ? 'Submitting Application...' : 'Submit Application'}
+                      </button>
+                    </form>
+                    
+                    <div className="mt-4 text-sm text-gray-600">
+                      <p>* Required fields</p>
+                      <p>Note: Please attach your resume/CV by email to info@systemsteelengg.com after submitting this form.</p>
+                    </div>
+                  </div>
                 )}
               </>
             )}

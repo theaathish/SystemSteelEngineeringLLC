@@ -3,7 +3,6 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import React from 'react';
-import Head from 'next/head';
 
 export default function AboutPage() {
   return (
@@ -17,9 +16,8 @@ export default function AboutPage() {
             <Image
               src="/about-banner.jpg"
               alt="About Us"
-              layout="fill"
-              objectFit="cover"
-              className="brightness-50 rounded-xl"
+              fill
+              className="brightness-50 rounded-xl object-cover"
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">About Us</h1>
@@ -32,13 +30,14 @@ export default function AboutPage() {
           {/* Content Section */}
           <div className="py-16 px-4">
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <Image
-                src="/About_left.jpg"
-                alt="About Us Image"
-                width={600}
-                height={400}
-                className="rounded-lg object-cover"
-              />
+              <div className="relative h-[400px]">
+                <Image
+                  src="/About_left.jpg"
+                  alt="About Us Image"
+                  fill
+                  className="rounded-lg object-cover"
+                />
+              </div>
               <div>
                 <h2 className="text-3xl font-bold text-gray-800 mb-6">
                   Leading Steel Engineering Solutions
