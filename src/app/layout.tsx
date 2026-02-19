@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,42 +24,42 @@ export const metadata: Metadata = {
     "Industrial Steel Manufacturing UAE",
     "Custom Steel Fabrication Dubai",
     "Steel Engineering Services UAE",
-    
+
     // Specialized Services
     "Heavy Steel Structure Fabrication",
     "Precision Steel Cutting UAE",
     "Industrial Welding Services Dubai",
     "Steel Construction Solutions",
     "Metal Processing UAE",
-    
+
     // Industry Specific
     "Oil & Gas Steel Solutions",
     "Construction Steel UAE",
     "Industrial Plant Steel Work",
     "Commercial Steel Projects Dubai",
     "Infrastructure Steel Solutions",
-    
+
     // Location Specific
     "Steel Fabricators Dubai",
     "Abu Dhabi Steel Company",
     "Sharjah Steel Manufacturing",
     "UAE Steel Industry",
     "Middle East Steel Solutions",
-    
+
     // Quality & Expertise
     "ISO Certified Steel Fabrication",
     "Professional Steel Engineering",
     "Expert Metal Fabrication UAE",
     "Quality Steel Manufacturing",
     "Steel Industry Leaders UAE",
-    
+
     // Technical Specifications
     "Structural Steel Design UAE",
     "Steel Beam Fabrication",
     "Custom Metal Solutions",
     "Industrial Steel Processing",
     "Engineering Consultation UAE",
-    
+
     // Project Types
     "Large Scale Steel Projects",
     "Industrial Steel Construction",
@@ -124,9 +125,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <Analytics />
-        
+
         {/* JSON-LD Schema for Google Rich Snippets */}
         <script
           type="application/ld+json"
